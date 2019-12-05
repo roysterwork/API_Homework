@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!--  Ann Arbor Should be Default City if nothing is selectected-->
+	<!--  Farienheit is default temp if nothing is selected-->
+	<!--  Using J Quiry and JavaScript -->
+	<!--  Do not bother body!!-->
+	<!--  Save Json data into variable  -->
+
+<title>Weather</title>
+<!-- Don't forget to link to jQuery -->
+<style>
+	input{
+		margin: 10px 0px;
+		padding: 5px;
+	}
+	#forecast{
+		/*This div should not appear until the weather is returned.*/
+	}
+	#forecast div{
+		width: 25vw;
+		border: 8px solid blue;
+		margin: 0 auto;
+		background: black;
+	}
+	img{
+		width:100%;
+	}
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script>
+	  let YourWeatherAppID = "758e943d632b6af95c7013fd21a42b53";
+
+    function gettingJSON(){
+    	console.log("Hi")
+    	// Use the OpenWeather API to return:
+    	//  the current temperature
+    	//  the high temperature for the day
+    	//  the low temperature for the day
+    	//  the icon for the current weather.
+			//  API giving in JSon format, place json into variable
+			//  from variable place into HTML
+
+			var city;
+			if(!$("#location").val()){
+				city = "Ann Arbor";
+			}
+			else {
+				city = $("#location").val();
+			}
+
+			var units;
+			if ($("input[value='metric']").prop("checked")) {
+				units = "metric";
+			}
+			else {
+				units = "imperial";
+			}
+
+
+    	// You will need to update this query with the city, weather format (Celsius or Fahrenheit) and your OpenWeatherMap ID
+
+    	// Right now I have it set to Chicago.  The default should be Ann Abor/Fahreheit.
+		let query = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=" + units + "&APPID=" + YourWeatherAppID;
+        console.log("Query is :" + query)
+
+        $.getJSON(query,function(json){
+					  console.log(JSON.stringify(json.weather[0].icon));
+            console.log(JSON.stringify(json.main.temp));
+						console.log(JSON.stringify(json.main.temp_min));
+						console.log(JSON.stringify(json.main.temp_max));
+						console.log(JSON.stringify(json.name));
+
+						$("#loc").text(json.name);
+						$("#temp").text(json.main.temp);
+						$("#high").text(json.main.temp_max);
+						$("#low").text(json.main.temp_min);
+
+
+
+// DEFAULT FAHRENHEIT
+// if id celsius or fahrenheit not checked, then check id fahrenheit
+
+
+  //   if($("input[id=fahrenheit]").is(":checked")){
+  //   }
+	//
+	// 	else if($("input[id=celcius]").is(":checked")) {
+	//
+	// 	}
+	//
+  //   else{
+	//
+	// 	$("input[id=fahrenheit]").prop( "checked", true );
+	//
+  //   alert("Whether is gonna be fahrenheit now")
+	//
+  // }
+
+
+// DEFAULT ANN ARBOR
+	// if id location black, then search Ann Arbor
+
+
+
+
+	// if($("#location").val().length==0){
+	//
+	// 	$("#location").text("Ann Arbor")
+	// };
+
+
+// })
+
+
+// ICON PIC
+
+// ID: "tempImg"
+// icon key = json.weather[0].icon
+var iconcode = json.weather[0].icon
+var url = "https://openweathermap.org/img/wn/" + iconcode + ".png"
+console.log(url);
+
+$("#tempImg").attr("src", url);
+
+
+
+// Icon URL
+// http://openweathermap.org/img/wn/10d@2x.png
+
+
+
+
+						// for the icon you have to find the url to append it to
+
+						// control f icon,
+						// list of weather conditions - scroll down and click url
+    })
+    }
+
+		// .getJson is a jquery method with two parameters need address which is query (the webadress)
+		// variable and "json" which is the information at the adress
+		// console.log(JSON.stringify(json)); is saying to show all the information in the json file
+
+		// pull high, low, icon, and current tempeture from json and pub into HTML ICON
+    </script>
+</head>
+
+<body>
+	<!-- DO NOT CHANGE ANY CODE IN THE BODY OF THIS FILE. -->
+	<label for ="location">City:</label><input type = "text" id = "location"><br>
+	<input type = "radio" name = "temp" value = "imperial" id = "fahrenheit"> <label for = "fahrenheit">Fahrenheit</label><br>
+	<input type = "radio" name = "temp" value = "metric" id = "celcius"> <label for = "celcius">Celcius</label><br>
+
+	<button id = "getIt" onclick = " gettingJSON()">Get Weather</button>
+
+	<div id = "forecast">
+		<div>
+		<img id = "tempImg" src="" alt = "" title = "">
+		</div>
+		<p>The temperature in <span id = "loc"></span> is currently <span id = "temp"></span>.</p>
+		<p>The high today will be <span id = "high"></span> and the low will be <span id = "low"></span>.</p>
+
+	</div>
+</body>
+</html>
